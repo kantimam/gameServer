@@ -1,14 +1,12 @@
 import Character from './Character.js';
 import Projectile from './Projectile.js';
 
-export default function renderGame(socket) {
-
+export default function renderGame(socket, initialGameState) {
 
 
 
   const app = new PIXI.Application();
   app.renderer.resize(window.innerWidth, window.innerHeight)
-  console.log(app.renderer.width)
   const b = new Bump(PIXI);
   const renderer = document.getElementById("rendererDiv").appendChild(app.view);
   renderer.style.touchAction = "auto";
@@ -43,6 +41,25 @@ export default function renderGame(socket) {
 
       return sprite
     }
+    const players = {}
+    /* socket.emit('newPlayer')
+
+    socket.on('newactor', (actor) => {
+      console.log(actor)
+      players[actor.id]=createCharacter(app.stage, actor.x, actor.y, actor.size)
+    }) */
+
+    // create sprites for all the players
+
+    Object.entries(initialGameState.players).forEach(entry=>{
+      const key=entry[0];
+      const value=entry[1]
+      players[key]=createCharacter(app.stage, value.x, value.y, value.size);
+    })
+
+
+
+    console.log(initialGameState)
 
 
 
@@ -108,11 +125,6 @@ export default function renderGame(socket) {
     })
 
 
-    const players = {}
-    /* players[socket.id]=createCharacter(app.stage) */
-
-
-
     let projectiles = []
 
     function shootFromChar(bounds, mouseX, mouseY) {
@@ -176,12 +188,7 @@ export default function renderGame(socket) {
       } */
       projectileState = state.projectiles
     })
-    socket.emit('newPlayer')
-
-    socket.on('newactor', (actor) => {
-      console.log(actor)
-      players[actor.id]=createCharacter(app.stage, actor.x, actor.y, actor.size)
-    })
+    
 
     /* function sendUpdatesToServer(player){
       if(player){
@@ -240,12 +247,12 @@ export default function renderGame(socket) {
     app.ticker.add(() => {
       movementFromInput(up,right,down,left)
 
-      if (projectileState && projectileState.length === projectiles.length) {
+      /* if (projectileState && projectileState.length === projectiles.length) {
         for (let i = 0; i < projectiles.length; i++) {
           projectiles[i].position.x = projectileState[i].posX;
           projectiles[i].position.y = projectileState[i].posY;
         }
-      }
+      } */
 
 
 

@@ -15,19 +15,37 @@ const gameState = {
    players: {},
    projectiles: []
 }
+spriteArray=[1,2,3,4,5,6];
 const projectileSpeed=6;
 let socketId=0;
+const connectionsLimit=2;
+let connectionsCount=0;
+let playerCount=0;
 io.on('connection',(socket)=>{
+    if(connectionsCount>=connectionsLimit){
+        socket.emit('err',{
+            message: 'this lobby is full'
+        })
+        socket.disconnect()
+        console.log(`disconnected ${socket.id}`)
+        return 
+    }
+    connectionsCount++;
     console.log(`user connected with the id: ${socket.id}`)
     socketId=socket.id;
     socket.on('disconnect',()=>{
+        connectionsCount--;
         console.log(`disconnected userId: ${socket.id}`)
         delete gameState.players[socket.id]
     })
     socket.on('newPlayer',()=>{
+        // check what sprite the other player has and pick another one
+        let objectPlayerCount=Object.values(gameState.players).length;
+        objectPlayerCount=objectPlayerCount? objectPlayerCount : 0;
         console.log("newPlayer")
         const newPlayer={
             id: socket.id,
+            sprite: spriteArray[objectPlayerCount],
             x:Math.floor(Math.random()*600),
             y:Math.floor(Math.random()*400),
             animation: "idle",
@@ -36,8 +54,16 @@ io.on('connection',(socket)=>{
         }
         gameState.players[socket.id]=newPlayer
         console.log(gameState)
-        io.sockets.emit('newactor', newPlayer);
+        /* io.sockets.emit('newactor', newPlayer); */
+        io.sockets.emit('playercreated', gameState);
+    })
 
+    socket.on('startgame',()=>{
+        if(connectionsCount===2){
+            console.log(Object.entries(gameState.players))
+            io.sockets.emit('gamestarted',gameState)
+        }
+        
     })
 
     socket.on('playerMovement',(playerMovement)=>{
@@ -50,7 +76,6 @@ io.on('connection',(socket)=>{
     })
     socket.on('shoot',(projectile)=>{
         const currentPlayer=gameState.players[socket.id]
-        console.log(socket.id)
         if(currentPlayer){
             const angle=Math.atan2(projectile.x-currentPlayer.x, projectile.y-currentPlayer.y);
             gameState.projectiles.push({
