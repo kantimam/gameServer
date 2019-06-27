@@ -6,11 +6,14 @@ export default function renderGame(socket, initialGameState) {
 
 
   const app = new PIXI.Application();
-  app.renderer.resize(window.innerWidth, window.innerHeight)
+  //app.renderer.resize(window.innerWidth, window.innerHeight)
+  app.renderer.resize(800, 600)
   const b = new Bump(PIXI);
-  const renderer = document.getElementById("rendererDiv").appendChild(app.view);
+  const rendererContainer= document.getElementById("rendererDiv")
+  const renderer = rendererContainer.appendChild(app.view);
+  const containerOffsetTop=rendererContainer.offsetTop;
+  const containerOffsetLeft=rendererContainer.offsetLeft;
   renderer.style.touchAction = "auto";
-
 
   PIXI.Loader.shared
     .add("sprites/penguin.json")
@@ -117,8 +120,8 @@ export default function renderGame(socket, initialGameState) {
       }
     })
     renderer.addEventListener('click', (event) => {
-      console.log(gameState)
-      console.log(players)
+      /* console.log(gameState)
+      console.log(players) */
       if (players[socket.id] && players[socket.id].shootReady) {
         players[socket.id].shoot(() => spawnProjectileAtServer(players[socket.id].getBounds(), event.clientX, event.clientY));
       }
@@ -170,9 +173,10 @@ export default function renderGame(socket, initialGameState) {
     let projectileId = 0;
 
     function spawnProjectileAtServer(bounds, mouseX, mouseY) {
+      // get mouse position inside of div by subtracting containeroffset
       socket.emit('shoot', {
-        x: mouseX,
-        y: mouseY,
+        x: mouseX - containerOffsetLeft,
+        y: mouseY - containerOffsetTop,
         /* id: projectileId */
       })
       /* createProjectile(bounds, mouseX, mouseY) */

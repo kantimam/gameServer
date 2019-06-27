@@ -19,6 +19,7 @@ spriteArray=[1,2,3,4,5,6];
 const projectileSpeed=6;
 let socketId=0;
 const connectionsLimit=2;
+const gameResolution={x:800,y:600};
 let connectionsCount=0;
 let playerCount=0;
 io.on('connection',(socket)=>{
@@ -95,23 +96,34 @@ setInterval(() => {
     gameState.projectiles.forEach(projectile=>{
         projectile.posX+=projectile.moveX;
         projectile.posY+=projectile.moveY;
+        const collisions=collisionWorld(projectile.posX,projectile.posY,gameResolution.x,gameResolution.y);
+        if(collisions.top) {projectile.posY=0; projectile.moveY*=-1;}
+        if(collisions.right) {projectile.posX=gameResolution.x; projectile.moveX*=-1;}
+        if(collisions.bottom) {projectile.posY=gameResolution.y; projectile.moveY*=-1;}
+        if(collisions.left) {projectile.posX=0; projectile.moveX*=-1;}
+        
     })
     io.sockets.emit('state', gameState);
-  }, 1000/60);
+  }, 1000/60/* 1000/5 */);
 
 
+function collisionWorld(actorX, actorY, containerWidth, containerHeight){
+    const collisions={top:false, right:false, bottom:false, left:false}
+    if(actorX>containerWidth){
+        collisions.right=true;
+    }
+    if(actorX<0){
+        collisions.left=true;
+    }
+    if(actorY>containerHeight){
+        collisions.bottom=true;
+    }
+    if(actorY<0){
+        collisions.top=true;
+    }
+    return collisions
+}
 
-
-/* setInterval(() => {
-    io.sockets.emit('newactor', {
-        id: socketId,
-        x:Math.floor(Math.random()*600),
-        y:Math.floor(Math.random()*400),
-        animation: "idle",
-        health: 100,
-        size: 3
-    });
-  }, 4000); */
 
   function spawnActor(){
     io.sockets.emit('newactor', {
