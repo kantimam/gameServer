@@ -78,13 +78,14 @@ io.on('connection',(socket)=>{
         const currentPlayer=gameState.players[socket.id]
         if(currentPlayer){
             const angle=Math.atan2(projectile.x-currentPlayer.x, projectile.y-currentPlayer.y);
-            gameState.projectiles.push({
-                id: projectile.id,
+            const newprojectile={
                 posX: currentPlayer.x,
                 posY: currentPlayer.y,
                 moveX: projectileSpeed*Math.sin(angle),
                 moveY: projectileSpeed*Math.cos(angle)
-            })
+            }
+            gameState.projectiles.push(newprojectile)
+            io.sockets.emit('newprojectile',newprojectile)
         }
         
     })

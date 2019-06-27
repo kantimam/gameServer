@@ -15,6 +15,7 @@ socket.on('playercreated',(gameState)=>{
 })
 
 
+
 function startGame(){
     if(currentPlayerCount===2){
         socket.emit('startgame')
@@ -28,7 +29,3 @@ socket.on('gamestarted',(initialGameState)=>{
     }
 })
 
-
-/* if(socket && gameState==='started'){
-    renderGame(socket)
-} */

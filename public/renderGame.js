@@ -156,6 +156,16 @@ export default function renderGame(socket, initialGameState) {
       projectiles.push(newProjectile)
       app.stage.addChild(newProjectile)
     }
+    function createProjectileOffSreen() {
+      
+      const newProjectile = new Projectile(sheet.animations.idle)
+      newProjectile.position = {x:-20,y: -20};
+      newProjectile.animationSpeed = 0.167;
+      newProjectile.zIndex = 1;
+      newProjectile.gotoAndPlay(0);
+      projectiles.push(newProjectile)
+      app.stage.addChild(newProjectile)
+    }
 
     let projectileId = 0;
 
@@ -163,9 +173,9 @@ export default function renderGame(socket, initialGameState) {
       socket.emit('shoot', {
         x: mouseX,
         y: mouseY,
-        id: projectileId
+        /* id: projectileId */
       })
-      createProjectile(bounds, mouseX, mouseY)
+      /* createProjectile(bounds, mouseX, mouseY) */
       projectileId++;
     }
 
@@ -179,13 +189,19 @@ export default function renderGame(socket, initialGameState) {
     }
 
     // get data from server
-    let projectileState = 0;
+    let projectileState = [];
     socket.on('state', (state) => {
       gameState = state;
       /* for(let player in state.players){
         playerArray.push(state.players[player]);
         
       } */
+      let projectileAdded=state.projectiles.length-projectileState.length;
+      if(projectileAdded){
+        for(let i=0; i<projectileAdded; i++){
+          createProjectileOffSreen();
+        }
+      }
       projectileState = state.projectiles
     })
     
@@ -247,12 +263,12 @@ export default function renderGame(socket, initialGameState) {
     app.ticker.add(() => {
       movementFromInput(up,right,down,left)
 
-      /* if (projectileState && projectileState.length === projectiles.length) {
+      if (projectileState && projectileState.length === projectiles.length) {
         for (let i = 0; i < projectiles.length; i++) {
           projectiles[i].position.x = projectileState[i].posX;
           projectiles[i].position.y = projectileState[i].posY;
         }
-      } */
+      }
 
 
 
