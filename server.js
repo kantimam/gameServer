@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
 
 const gameState = {
    players: {},
-   projectiles: []
+   projectiles: [],
 }
 spriteArray=[1,2,3,4,5,6];
 const projectileSpeed=6;
@@ -49,6 +49,8 @@ io.on('connection',(socket)=>{
             sprite: spriteArray[objectPlayerCount],
             x:Math.floor(Math.random()*600),
             y:Math.floor(Math.random()*400),
+            height: 80,
+            width: 60,
             animation: "idle",
             health: 100,
             size: 3
@@ -83,7 +85,8 @@ io.on('connection',(socket)=>{
                 posX: currentPlayer.x,
                 posY: currentPlayer.y,
                 moveX: projectileSpeed*Math.sin(angle),
-                moveY: projectileSpeed*Math.cos(angle)
+                moveY: projectileSpeed*Math.cos(angle),
+                aliveFor: 600  //server ticks should be 10 seconds
             }
             gameState.projectiles.push(newprojectile)
             io.sockets.emit('newprojectile',newprojectile)
@@ -92,8 +95,31 @@ io.on('connection',(socket)=>{
     })
 })
 
-setInterval(() => {
-    gameState.projectiles.forEach(projectile=>{
+setInterval(() => updateGameState(), 1000/60/* 1000/5 */);
+
+
+function updateGameState(){
+    for(let i=gameState.projectiles.length-1;i>=0;i--){
+        if(gameState.projectiles[i].aliveFor<0){
+            console.log(gameState.projectiles, i)
+            gameState.projectiles.splice(i,1);
+        }
+        else{
+            gameState.projectiles[i].posX+=gameState.projectiles[i].moveX;
+            gameState.projectiles[i].posY+=gameState.projectiles[i].moveY;
+            const collisions=collisionWorld(gameState.projectiles[i].posX,gameState.projectiles[i].posY,gameResolution.x,gameResolution.y);
+            if(collisions.top) {gameState.projectiles[i].posY=0; gameState.projectiles[i].moveY*=-1;}
+            if(collisions.right) {gameState.projectiles[i].posX=gameResolution.x; gameState.projectiles[i].moveX*=-1;}
+            if(collisions.bottom) {gameState.projectiles[i].posY=gameResolution.y; gameState.projectiles[i].moveY*=-1;}
+            if(collisions.left) {gameState.projectiles[i].posX=0; gameState.projectiles[i].moveX*=-1;}
+
+            gameState.projectiles[i].aliveFor--;
+        }
+    }
+    /* gameState.projectiles.forEach(projectile=>{
+        if(projectile.aliveFor<0){
+
+        }
         projectile.posX+=projectile.moveX;
         projectile.posY+=projectile.moveY;
         const collisions=collisionWorld(projectile.posX,projectile.posY,gameResolution.x,gameResolution.y);
@@ -102,9 +128,9 @@ setInterval(() => {
         if(collisions.bottom) {projectile.posY=gameResolution.y; projectile.moveY*=-1;}
         if(collisions.left) {projectile.posX=0; projectile.moveX*=-1;}
         
-    })
+    }) */
     io.sockets.emit('state', gameState);
-  }, 1000/60/* 1000/5 */);
+}  
 
 
 function collisionWorld(actorX, actorY, containerWidth, containerHeight){
@@ -137,4 +163,4 @@ function collisionWorld(actorX, actorY, containerWidth, containerHeight){
 
 
 
-server.listen(5000,()=>console.log(`running on port 50000`))
+server.listen(5000,()=>console.log(`running on port 5000`))

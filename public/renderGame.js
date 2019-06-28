@@ -58,6 +58,7 @@ export default function renderGame(socket, initialGameState) {
       const key=entry[0];
       const value=entry[1]
       players[key]=createCharacter(app.stage, value.x, value.y, value.size);
+      console.log(players)
     })
 
 
@@ -201,9 +202,15 @@ export default function renderGame(socket, initialGameState) {
         
       } */
       let projectileAdded=state.projectiles.length-projectileState.length;
-      if(projectileAdded){
+      if(projectileAdded>0){
         for(let i=0; i<projectileAdded; i++){
           createProjectileOffSreen();
+        }
+      }else if(projectileAdded<0){
+        for(let i=0; i>projectileAdded; i--){
+          const removedProjectile=projectiles.shift();
+          //removes projectile from parent so it wont be rendered anymore
+          removedProjectile.parent.removeChild(removedProjectile)
         }
       }
       projectileState = state.projectiles
