@@ -276,8 +276,10 @@ export default function renderGame(socket, initialGameState) {
 
       if (projectileState && projectileState.length === projectiles.length) {
         for (let i = 0; i < projectiles.length; i++) {
-          projectiles[i].position.x = projectileState[i].posX;
-          projectiles[i].position.y = projectileState[i].posY;
+          projectiles[i].position.x = projectileState[i].x;
+          projectiles[i].position.y = projectileState[i].y;
+          projectiles[i].scale.x = projectileState[i].scale;
+          projectiles[i].scale.y = projectileState[i].scale;
         }
       }
 
