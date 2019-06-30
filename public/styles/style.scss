@@ -1,4 +1,57 @@
+$gameWidth:1024px;
+
+#welcomeBanner{
+    h1{
+        text-align: center;
+    }
+}
+main{
+    max-width: 80rem;
+    width: 90%;
+    h3,h4{
+        text-align: center;
+    }
+}
+
 #gameUi{
+    margin-top: 1rem;
+    width: 100%;
+    max-width: $gameWidth;
+    display: flex;
+    justify-content: space-between;
+    height: 3rem;
+    background-color: orange;
+    .hpBarWrapper{
+        width: 70%;
+        height: 100%;
+        background-color: white;
+        border: 0.1rem solid black;
+        box-sizing: border-box;
+        border-radius: 0.8rem;
+        overflow: hidden;
+        position: relative;
+        .hpBar{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20%;
+            background-color: red;
+            
+            height: 120%;
+        }
+    }
+
+
+}
+.inner{
+    max-width: 80rem;
+    width: 90%;
+}
+.marginAuto{
+    margin: 0 auto;
+}
+
+#gamePrepare{
     background-color: blue;
     display: flex;
     justify-content: center;
@@ -9,4 +62,12 @@
         border-radius: 0.5rem;
         border: none;
     }
+}
+
+#rendererDiv{
+    margin: 0 auto;
+    background-color: blue;
+    min-height: 400px;
+    width: $gameWidth;
+    padding: 0;
 }

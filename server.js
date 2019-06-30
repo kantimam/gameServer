@@ -22,8 +22,8 @@ const projectileSpeed = 6;
 let socketId = 0;
 const connectionsLimit = 2;
 const gameResolution = {
-    x: 800,
-    y: 600
+    x: 1024,
+    y: 576
 };
 let connectionsCount = 0;
 let playerCount = 0;
@@ -56,11 +56,11 @@ io.on('connection', (socket) => {
             sprite: spriteArray[objectPlayerCount],
             x: Math.floor(Math.random() * 600),
             y: Math.floor(Math.random() * 400),
-            height: 80,
-            width: 60,
+            height: 50,
+            width: 30,
             animation: "idle",
             health: 100,
-            size: 3,
+            size: 2,
             team: objectPlayerCount
         }
         gameState.players[socket.id] = newPlayer

@@ -1,4 +1,61 @@
+#welcomeBanner h1 {
+  text-align: center;
+}
+
+main {
+  max-width: 80rem;
+  width: 90%;
+}
+
+main h3, main h4 {
+  text-align: center;
+}
+
 #gameUi {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 1024px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 3rem;
+  background-color: orange;
+}
+
+#gameUi .hpBarWrapper {
+  width: 70%;
+  height: 100%;
+  background-color: white;
+  border: 0.1rem solid black;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  position: relative;
+}
+
+#gameUi .hpBarWrapper .hpBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  background-color: red;
+  height: 120%;
+}
+
+.inner {
+  max-width: 80rem;
+  width: 90%;
+}
+
+.marginAuto {
+  margin: 0 auto;
+}
+
+#gamePrepare {
   background-color: blue;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -8,12 +65,20 @@
           justify-content: center;
 }
 
-#gameUi button {
+#gamePrepare button {
   height: 2rem;
   padding: 0.5rem;
   -webkit-box-sizing: content-box;
           box-sizing: content-box;
   border-radius: 0.5rem;
   border: none;
+}
+
+#rendererDiv {
+  margin: 0 auto;
+  background-color: blue;
+  min-height: 400px;
+  width: 1024px;
+  padding: 0;
 }
 /*# sourceMappingURL=style.css.map */

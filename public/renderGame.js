@@ -7,7 +7,7 @@ export default function renderGame(socket, initialGameState) {
 
   const app = new PIXI.Application();
   //app.renderer.resize(window.innerWidth, window.innerHeight)
-  app.renderer.resize(800, 600)
+  app.renderer.resize(1024, 576)
   const b = new Bump(PIXI);
   const rendererContainer= document.getElementById("rendererDiv")
   const renderer = rendererContainer.appendChild(app.view);

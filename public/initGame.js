@@ -1,5 +1,14 @@
 import renderGame from './renderGame.js'
 
+// html ui
+const hpBar=document.getElementsByClassName("hpBar")[0];
+console.log(hpBar)
+function setHp(hp){
+    hpBar.style.width=`${hp}%`
+}
+window.setHp=setHp;
+
+// connection logic
 const socket = io();
 
 let gameState='waiting';
@@ -13,8 +22,6 @@ socket.on('playercreated',(gameState)=>{
     currentPlayerCount=Object.keys(gameState.players).length
     console.log(currentPlayerCount)
 })
-
-
 
 function startGame(){
     if(currentPlayerCount===2){

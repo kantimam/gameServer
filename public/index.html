@@ -16,14 +16,26 @@
 </head>
 <script src="pixi/pixi.min.js"></script>
 <script src="bump/bump.js"></script>
-<script src="/socket.io/socket.io.js"></script>
+<script src="socket.io/socket.io.js"></script>
 <body>
     <section id='welcomeBanner'>
-
+        <h1>PLEASE DONT SUE ME ADVENTURE TIME</h1>
     </section>
-    <section id="gameUi">
-        <button id='startGame' onclick="startGame()">START GAME</button>
+    <main class="inner marginAuto">
+        <h3>you need at least 2 players to play.</h3>
+    </main>
+    <section id="gamePrepare" class="inner marginAuto">
+        <button id='createPlayer' onclick="joinLobby()">CREATE PLAYER</button>
         <button id='createPlayer' onclick="createPlayer()">CREATE PLAYER</button>
+        <button id='startGame' onclick="startGame()">START GAME</button>
+    </section>
+    <section id="gameUi" class="inner marginAuto">
+        <div class="playerIcon">
+
+        </div>
+        <div class="hpBarWrapper">
+            <div onclick="setHp(70)" class="hpBar"></div>
+        </div>
     </section>
     
     <div id="rendererDiv"></div>
