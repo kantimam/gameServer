@@ -1,0 +1,19 @@
+#gameUi {
+  background-color: blue;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#gameUi button {
+  height: 2rem;
+  padding: 0.5rem;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  border-radius: 0.5rem;
+  border: none;
+}
+/*# sourceMappingURL=style.css.map */

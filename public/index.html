@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="./styles/style.css">
     <style>
         body{
             margin: 0;
@@ -17,9 +18,14 @@
 <script src="bump/bump.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <body>
+    <section id='welcomeBanner'>
 
-    <button id='startGame' onclick="startGame()">START GAME</button>
-    <button id='createPlayer' onclick="createPlayer()">CREATE PLAYER</button>
+    </section>
+    <section id="gameUi">
+        <button id='startGame' onclick="startGame()">START GAME</button>
+        <button id='createPlayer' onclick="createPlayer()">CREATE PLAYER</button>
+    </section>
+    
     <div id="rendererDiv"></div>
     <script src="initGame.js" type="module"></script>
 </body>

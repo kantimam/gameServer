@@ -287,15 +287,9 @@ export default function renderGame(socket, initialGameState) {
 
       if (gameState.players/*  && Object.entries(players).legnth>0 */) {
         for (let player in gameState.players) {
-          try{
             players[player].position.x = gameState.players[player].x;
             players[player].position.y = gameState.players[player].y;
             players[player].selectAnimation(gameState.players[player].animation || "idle")
-          }
-          catch{
-
-          }
-          
         }
       }
 

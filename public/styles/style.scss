@@ -1,0 +1,12 @@
+#gameUi{
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    button{
+        height: 2rem;
+        padding: 0.5rem;
+        box-sizing: content-box;
+        border-radius: 0.5rem;
+        border: none;
+    }
+}
