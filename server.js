@@ -15,6 +15,8 @@ const gameState = {
    players: {},
    projectiles: [],
 }
+// array of socket ids in order they connect for easier acces
+playerKeys=[];
 spriteArray=[1,2,3,4,5,6];
 const projectileSpeed=6;
 let socketId=0;
@@ -42,6 +44,7 @@ io.on('connection',(socket)=>{
     socket.on('newPlayer',()=>{
         // check what sprite the other player has and pick another one
         let objectPlayerCount=Object.values(gameState.players).length;
+        //if playercount is not 0 give them another sprite from the array.... also handle bad values
         objectPlayerCount=objectPlayerCount? objectPlayerCount : 0;
         console.log("newPlayer")
         const newPlayer={
@@ -56,6 +59,7 @@ io.on('connection',(socket)=>{
             size: 3
         }
         gameState.players[socket.id]=newPlayer
+        playerKeys[objectPlayerCount]=socket.id;
         console.log(gameState)
         /* io.sockets.emit('newactor', newPlayer); */
         io.sockets.emit('playercreated', gameState);
@@ -82,11 +86,13 @@ io.on('connection',(socket)=>{
         if(currentPlayer){
             const angle=Math.atan2(projectile.x-currentPlayer.x, projectile.y-currentPlayer.y);
             const newprojectile={
-                posX: currentPlayer.x,
-                posY: currentPlayer.y,
+                x: currentPlayer.x,
+                y: currentPlayer.y,
                 moveX: projectileSpeed*Math.sin(angle),
                 moveY: projectileSpeed*Math.cos(angle),
-                aliveFor: 600  //server ticks should be 10 seconds
+                aliveFor: 600,  //server ticks should be 10 seconds
+                height: 20,
+                width: 20
             }
             gameState.projectiles.push(newprojectile)
             io.sockets.emit('newprojectile',newprojectile)
@@ -105,13 +111,22 @@ function updateGameState(){
             gameState.projectiles.splice(i,1);
         }
         else{
-            gameState.projectiles[i].posX+=gameState.projectiles[i].moveX;
-            gameState.projectiles[i].posY+=gameState.projectiles[i].moveY;
-            const collisions=collisionWorld(gameState.projectiles[i].posX,gameState.projectiles[i].posY,gameResolution.x,gameResolution.y);
-            if(collisions.top) {gameState.projectiles[i].posY=0; gameState.projectiles[i].moveY*=-1;}
-            if(collisions.right) {gameState.projectiles[i].posX=gameResolution.x; gameState.projectiles[i].moveX*=-1;}
-            if(collisions.bottom) {gameState.projectiles[i].posY=gameResolution.y; gameState.projectiles[i].moveY*=-1;}
-            if(collisions.left) {gameState.projectiles[i].posX=0; gameState.projectiles[i].moveX*=-1;}
+            gameState.projectiles[i].x+=gameState.projectiles[i].moveX;
+            gameState.projectiles[i].y+=gameState.projectiles[i].moveY;
+            //check for collision with map
+            const collisions=collisionWorld(gameState.projectiles[i].x,gameState.projectiles[i].y,gameResolution.x,gameResolution.y);
+
+            if(collisionActorSimple(gameState.players[playerKeys[0]], gameState.projectiles[i])){
+                gameState.players[playerKeys[0]].x=40;
+            }
+            if(collisionActorSimple(gameState.players[playerKeys[1]], gameState.projectiles[i])){
+                gameState.players[playerKeys[1]].x=40;
+            }
+
+            if(collisions.top) {gameState.projectiles[i].y=0; gameState.projectiles[i].moveY*=-1;}
+            if(collisions.right) {gameState.projectiles[i].x=gameResolution.x; gameState.projectiles[i].moveX*=-1;}
+            if(collisions.bottom) {gameState.projectiles[i].y=gameResolution.y; gameState.projectiles[i].moveY*=-1;}
+            if(collisions.left) {gameState.projectiles[i].x=0; gameState.projectiles[i].moveX*=-1;}
 
             gameState.projectiles[i].aliveFor--;
         }
@@ -120,13 +135,13 @@ function updateGameState(){
         if(projectile.aliveFor<0){
 
         }
-        projectile.posX+=projectile.moveX;
-        projectile.posY+=projectile.moveY;
-        const collisions=collisionWorld(projectile.posX,projectile.posY,gameResolution.x,gameResolution.y);
-        if(collisions.top) {projectile.posY=0; projectile.moveY*=-1;}
-        if(collisions.right) {projectile.posX=gameResolution.x; projectile.moveX*=-1;}
-        if(collisions.bottom) {projectile.posY=gameResolution.y; projectile.moveY*=-1;}
-        if(collisions.left) {projectile.posX=0; projectile.moveX*=-1;}
+        projectile.x+=projectile.moveX;
+        projectile.y+=projectile.moveY;
+        const collisions=collisionWorld(projectile.x,projectile.y,gameResolution.x,gameResolution.y);
+        if(collisions.top) {projectile.y=0; projectile.moveY*=-1;}
+        if(collisions.right) {projectile.x=gameResolution.x; projectile.moveX*=-1;}
+        if(collisions.bottom) {projectile.y=gameResolution.y; projectile.moveY*=-1;}
+        if(collisions.left) {projectile.x=0; projectile.moveX*=-1;}
         
     }) */
     io.sockets.emit('state', gameState);
@@ -148,6 +163,32 @@ function collisionWorld(actorX, actorY, containerWidth, containerHeight){
         collisions.top=true;
     }
     return collisions
+}
+function collisionActorDirection(actorOne,actorTwo){
+    const collisions={top:false, right:false, bottom:false, left:false}
+    if(actorOne.x+actorOne.width>actorTwo.x){
+        collisions.right=true;
+    }
+    if(actorOne.x<actorTwo.x+actorTwo.width){
+        collisions.left=true;
+    }
+    if(actorOne.y+actorOne.height>actorTwo.y){
+        collisions.bottom=true;
+    }
+    if(actorOne.y<actorTwo.y+actorTwo.height){
+        collisions.top=true;
+    }
+    return collisions
+}
+function collisionActorSimple(actorOne,actorTwo){
+    if(actorOne.x+actorOne.width>actorTwo.x ||
+        actorOne.x<actorTwo.x+actorTwo.width ||
+        actorOne.y+actorOne.height>actorTwo.y ||
+        actorOne.y<actorTwo.y+actorTwo.height){
+        
+        return true
+    }
+    return false
 }
 
 
