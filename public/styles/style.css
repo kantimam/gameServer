@@ -41,7 +41,7 @@ main h3, main h4 {
   position: absolute;
   top: 0;
   left: 0;
-  width: 20%;
+  width: 100%;
   background-color: red;
   height: 120%;
 }

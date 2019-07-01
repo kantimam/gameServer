@@ -125,15 +125,25 @@ function updateGameState() {
             //check for collision with map
             const collisions = collisionWorld(gameState.projectiles[i].x, gameState.projectiles[i].y, gameResolution.x, gameResolution.y);
 
+
+            /* TODO maybe split projectiles into 2 arrays to decrease checks */
+
             // check collision with players
+            let wasDeleted=false;
             for (player in gameState.players) {
                 gameState.players[player]
                 if (collisionActorSimple(gameState.players[player], gameState.projectiles[i]) &&
                     gameState.players[player].team != gameState.projectiles[i].team) {
-
-                    gameState.players[player].x = 40;
+                    // remove the projectile and jump to next iteration
+                    gameState.projectiles.splice(i, 1);
+                    gameState.players[player].health -=20;
+                    wasDeleted=true;
+                    console.log(gameState.players[player])
                 }
+                // no need to check collision with the other player if projectile doesnt excist anymore
+                if(wasDeleted) break;
             }
+            if(wasDeleted) continue;
 
 
             if (collisions.top) {

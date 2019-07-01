@@ -13,7 +13,13 @@ export default function renderGame(socket, initialGameState) {
   const renderer = rendererContainer.appendChild(app.view);
   const containerOffsetTop=rendererContainer.offsetTop;
   const containerOffsetLeft=rendererContainer.offsetLeft;
-  renderer.style.touchAction = "auto";
+  // html ui
+  const hpBar=document.getElementsByClassName("hpBar")[0];
+  function setHp(hp){
+      hpBar.style.width=`${hp}%`
+  }
+  /* window.setHp=setHp; */
+
 
   PIXI.Loader.shared
     .add("sprites/penguin.json")
@@ -124,14 +130,14 @@ export default function renderGame(socket, initialGameState) {
       /* console.log(gameState)
       console.log(players) */
       if (players[socket.id] && players[socket.id].shootReady) {
-        players[socket.id].shoot(() => spawnProjectileAtServer(players[socket.id].getBounds(), event.clientX, event.clientY));
+        players[socket.id].shoot(() => spawnProjectileAtServer(/* players[socket.id].getBounds(),  */event.clientX, event.clientY));
       }
     })
 
 
     let projectiles = []
 
-    function shootFromChar(bounds, mouseX, mouseY) {
+    /* function shootFromChar(bounds, mouseX, mouseY) {
       const position = {
         x: bounds.x + bounds.width / 2,
         y: bounds.y + bounds.height / 2
@@ -145,9 +151,9 @@ export default function renderGame(socket, initialGameState) {
       projectiles.push(newProjectile)
       app.stage.addChild(newProjectile)
 
-    }
+    } */
 
-    function createProjectile(bounds, mouseX, mouseY) {
+    /* function createProjectile(bounds, mouseX, mouseY) {
       const position = {
         x: bounds.x + bounds.width / 2,
         y: bounds.y + bounds.height / 2
@@ -159,7 +165,7 @@ export default function renderGame(socket, initialGameState) {
       newProjectile.gotoAndPlay(0);
       projectiles.push(newProjectile)
       app.stage.addChild(newProjectile)
-    }
+    } */
     function createProjectileOffSreen() {
       
       const newProjectile = new Projectile(sheet.animations.idle)
@@ -173,7 +179,7 @@ export default function renderGame(socket, initialGameState) {
 
     let projectileId = 0;
 
-    function spawnProjectileAtServer(bounds, mouseX, mouseY) {
+    function spawnProjectileAtServer(mouseX, mouseY) {
       // get mouse position inside of div by subtracting containeroffset
       socket.emit('shoot', {
         x: mouseX - containerOffsetLeft,
@@ -196,6 +202,12 @@ export default function renderGame(socket, initialGameState) {
     // get data from server
     let projectileState = [];
     socket.on('state', (state) => {
+      // change hp if it changed on server
+      if(gameState.players && (gameState.players[socket.id].health!=state.players[socket.id].health)){
+        console.log(state)
+        console.log(gameState)
+        setHp(state.players[socket.id].health);
+      }
       gameState = state;
       /* for(let player in state.players){
         playerArray.push(state.players[player]);
