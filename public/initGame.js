@@ -5,12 +5,17 @@ let playerSelect=document.getElementsByClassName("playerSelect");
 if(playerSelect){
     playerSelect=Array.from(playerSelect)
 }
-console.log(playerSelect)
 playerSelect.forEach((element)=>{
     element.addEventListener("click",(event)=>{
-        playerSelect[selectedPlayer].classList.remove("selected");
-        element.classList.add("selected");
-        selectedPlayer=element.value;
+        if(element.classList.contains("alreadySelected")){
+            alert("this character is already taken!")
+            return 
+        }
+        else{
+            playerSelect[selectedPlayer].classList.remove("selected");
+            element.classList.add("selected");
+            selectedPlayer=element.value;
+        } 
     })
 })
 
@@ -24,14 +29,24 @@ const socket = io();
 
 let gameState='waiting';
 function createPlayer(){
-    socket.emit('newPlayer')
+    socket.emit('newPlayer',selectedPlayer)
 }
 window.createPlayer=createPlayer
 
 let currentPlayerCount=0;
 socket.on('playercreated',(gameState)=>{
-    currentPlayerCount=Object.keys(gameState.players).length
-    console.log(currentPlayerCount)
+    /* currentPlayerCount=Object.keys(gameState.players).length */
+    currentPlayerCount=0;
+    playerSelect.forEach(element=>element.classList.remove("alreadySelected"))
+    for(let player in gameState.players){
+        if(player!==socket.id){
+            currentPlayerCount++;
+            const selectedSprite=gameState.players[player].sprite;
+            playerSelect[selectedSprite].classList.remove("selected")
+            playerSelect[selectedSprite].classList.add("alreadySelected")
+        }
+        
+    }
 })
 
 function startGame(){

@@ -46,15 +46,16 @@ io.on('connection', (socket) => {
         console.log(`disconnected userId: ${socket.id}`)
         delete gameState.players[socket.id]
     })
-    socket.on('newPlayer', () => {
+    socket.on('newPlayer', (selectedPlayer) => {
         // check what sprite the other player has and pick another one
         let objectPlayerCount = Object.values(gameState.players).length;
         //if playercount is not 0 give them another sprite from the array.... also handle bad values
         objectPlayerCount = objectPlayerCount ? objectPlayerCount : 0;
+        const selectedSprite=selectedPlayer;
         console.log("newPlayer")
         const newPlayer = {
             id: socket.id,
-            sprite: spriteArray[objectPlayerCount],
+            sprite: selectedSprite,
             x: Math.floor(Math.random() * 600),
             y: Math.floor(Math.random() * 400),
             height: 50,

@@ -54,6 +54,10 @@ li{
             transform: scale(1.1);
             border: 2px solid black;
        }
+       .alreadySelected{
+           transform: scale(0.9);
+           background-color: grey !important;
+       }
    } 
    button{
        display: block;

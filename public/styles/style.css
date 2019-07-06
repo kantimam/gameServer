@@ -76,6 +76,12 @@ li {
   border: 2px solid black;
 }
 
+#pickPlayer ul .alreadySelected {
+  -webkit-transform: scale(0.9);
+          transform: scale(0.9);
+  background-color: grey !important;
+}
+
 #pickPlayer button {
   display: block;
 }
