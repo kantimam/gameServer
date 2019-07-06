@@ -1,5 +1,33 @@
 $gameWidth:1024px;
 
+li{
+    list-style-type: none;
+}
+
+#pickPlayer{
+   height: 8rem;
+   width: 100%;
+   max-width: 40rem;
+   ul{
+       margin: 0;
+       padding: 0;
+       height: 100%;
+       display: grid;
+       grid-gap: 0.1rem;
+       grid-template-columns: 1fr 1fr 1fr 1fr;
+       li{
+           height: 100%;
+           background-color: grey;
+           box-sizing: border-box;
+           border: 1px solid black;
+           border-radius: 1rem;
+           &:hover{
+               transform: scale(1.10);
+           }
+       }
+   } 
+}
+
 #welcomeBanner{
     h1{
         text-align: center;

@@ -14,6 +14,7 @@ app.get('/', function (req, res) {
 const gameState = {
     players: {},
     projectiles: [],
+    //teams: {}
 }
 // array of socket ids in order they connect for easier acces
 playerKeys = [];
@@ -103,6 +104,7 @@ io.on('connection', (socket) => {
                 team: currentPlayer.team
             }
             gameState.projectiles.push(newprojectile)
+            //gameState.teams[currentPlayer.team]? gameState.teams[currentPlayer.team].push(newprojectile) : gameState.teams[currentPlayer.team]=[newprojectile]; 
             console.log(newprojectile)
             io.sockets.emit('newprojectile', newprojectile)
         }
