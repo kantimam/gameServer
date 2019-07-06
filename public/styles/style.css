@@ -2,16 +2,49 @@ li {
   list-style-type: none;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
+.centerAll {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+}
+
+.playerOne {
+  background-color: orange;
+}
+
+.playerTwo {
+  background-color: lightcoral;
+}
+
+.playerThree {
+  background-color: lightgreen;
+}
+
+.playerFour {
+  background-color: lightseagreen;
+}
+
 #pickPlayer {
-  height: 8rem;
   width: 100%;
+  min-height: 10rem;
   max-width: 40rem;
 }
 
 #pickPlayer ul {
   margin: 0;
-  padding: 0;
-  height: 100%;
+  padding: 0.5rem 0;
   display: -ms-grid;
   display: grid;
   grid-gap: 0.1rem;
@@ -20,17 +53,31 @@ li {
 }
 
 #pickPlayer ul li {
-  height: 100%;
-  background-color: grey;
+  height: 8rem;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border: 1px solid black;
   border-radius: 1rem;
 }
 
+#pickPlayer ul li img {
+  height: 5rem;
+}
+
 #pickPlayer ul li:hover {
   -webkit-transform: scale(1.1);
           transform: scale(1.1);
+  border: 2px solid black;
+}
+
+#pickPlayer ul .selected {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+  border: 2px solid black;
+}
+
+#pickPlayer button {
+  display: block;
 }
 
 #welcomeBanner h1 {
@@ -100,7 +147,7 @@ main h3, main h4 {
           justify-content: center;
 }
 
-#gamePrepare button {
+button {
   height: 2rem;
   padding: 0.5rem;
   -webkit-box-sizing: content-box;

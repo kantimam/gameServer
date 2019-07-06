@@ -3,29 +3,61 @@ $gameWidth:1024px;
 li{
     list-style-type: none;
 }
+.pointer{
+    cursor: pointer;
+}
+.centerAll{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
 
+
+
+.playerOne{
+    background-color: orange;
+}
+.playerTwo{
+    background-color: lightcoral;
+}
+.playerThree{
+    background-color: lightgreen;
+}
+.playerFour{
+    background-color: lightseagreen;
+}
 #pickPlayer{
-   height: 8rem;
    width: 100%;
+   min-height: 10rem;
    max-width: 40rem;
    ul{
        margin: 0;
-       padding: 0;
-       height: 100%;
+       padding: 0.5rem 0;
        display: grid;
        grid-gap: 0.1rem;
        grid-template-columns: 1fr 1fr 1fr 1fr;
        li{
-           height: 100%;
-           background-color: grey;
+           height: 8rem;
            box-sizing: border-box;
            border: 1px solid black;
            border-radius: 1rem;
+           img{
+               height: 5rem;
+           }
            &:hover{
-               transform: scale(1.10);
+               transform: scale(1.1);
+               border: 2px solid black;
            }
        }
+       .selected{
+            transform: scale(1.1);
+            border: 2px solid black;
+       }
    } 
+   button{
+       display: block;
+   }
 }
 
 #welcomeBanner{
@@ -83,13 +115,14 @@ main{
     background-color: blue;
     display: flex;
     justify-content: center;
-    button{
-        height: 2rem;
-        padding: 0.5rem;
-        box-sizing: content-box;
-        border-radius: 0.5rem;
-        border: none;
-    }
+    
+}
+button{
+    height: 2rem;
+    padding: 0.5rem;
+    box-sizing: content-box;
+    border-radius: 0.5rem;
+    border: none;
 }
 
 #rendererDiv{

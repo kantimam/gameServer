@@ -1,5 +1,23 @@
 import renderGame from './renderGame.js'
 
+let selectedPlayer=0;
+let playerSelect=document.getElementsByClassName("playerSelect");
+if(playerSelect){
+    playerSelect=Array.from(playerSelect)
+}
+console.log(playerSelect)
+playerSelect.forEach((element)=>{
+    element.addEventListener("click",(event)=>{
+        playerSelect[selectedPlayer].classList.remove("selected");
+        element.classList.add("selected");
+        selectedPlayer=element.value;
+    })
+})
+
+
+/* function selectedPlayer(i){
+
+} */
 
 // connection logic
 const socket = io();
