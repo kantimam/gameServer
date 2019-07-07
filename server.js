@@ -16,6 +16,9 @@ const gameState = {
     projectiles: [],
     //teams: {}
 }
+const rooms={
+
+}
 // array of socket ids in order they connect for easier acces
 playerKeys = [];
 spriteArray = [1, 2, 3, 4, 5, 6];
@@ -42,12 +45,27 @@ io.on('connection', (socket) => {
     console.log(`user connected with the id: ${socket.id}`)
     socketId = socket.id;
     io.sockets.emit('lobbyUpdate', connectionsCount)
+    
     socket.on('disconnect', () => {
         connectionsCount--;
         console.log(`disconnected userId: ${socket.id}`)
         delete gameState.players[socket.id]
         io.sockets.emit('lobbyUpdate', connectionsCount)
     })
+    
+    socket.on('createRoom',(room)=>{
+        if(room && room.name){
+            socket.join(room.name)
+            if(rooms[room.name]){
+                rooms[room.name].push(socket.id)
+            }else{
+                rooms[room.name]=[socket.id];
+            }
+            io.to(room.name).emit("roomCreated",rooms)
+            console.log(socket.in(room.name).id)
+        }
+    })
+
     socket.on('newPlayer', (selectedPlayer) => {
         // check what sprite the other player has and pick another one
         let objectPlayerCount = Object.values(gameState.players).length;

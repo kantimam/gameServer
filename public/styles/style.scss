@@ -12,6 +12,9 @@ li{
     align-items: center;
     align-content: center;
 }
+.hoverScale:hover{
+    transform: scale(1.1);
+}
 
 
 
@@ -117,13 +120,20 @@ main{
 
 #gamePrepare{
     /* background-color: blue; */
-
+    .createLobby{
+        margin: 0.5rem auto;
+        height: 4rem;
+        width: 10rem;
+        border-radius: 1rem;
+        border: 1px solid black;
+    }
     .lobbyContainer{
         display: flex;
         justify-content: center;
         height: 10rem;
         width: 100%;
         .lobbyItem{
+            margin: 0 0.5rem;
             height: 100%;
             min-width: 18rem;
             border-radius: 1rem;

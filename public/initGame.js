@@ -35,7 +35,15 @@ function initSocket(){
     listenToPlayerCreated();
     listenToGameStarted();
 }
-
+function createRoom(roomName){
+    socket.emit("createRoom",{
+        name: roomName
+    })
+}
+createRoom("roomOne")
+socket.on("roomCreated",(room)=>{
+    console.log(room)
+})
 
 let lobbySelect=document.getElementsByClassName("lobbyItem");
 if(lobbySelect){

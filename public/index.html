@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="./styles/style.css">
     <style>
-        body{
+        body {
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -17,6 +18,7 @@
 <script src="pixi/pixi.min.js"></script>
 <script src="bump/bump.js"></script>
 <script src="socket.io/socket.io.js"></script>
+
 <body>
     <section id='welcomeBanner'>
         <h1>PLEASE DONT SUE ME ADVENTURE TIME</h1>
@@ -25,33 +27,37 @@
         <h3>you need at least 2 players to play.</h3>
     </main>
     <section id="gamePrepare" class="inner marginAuto">
+        <div class="createLobby centerAll pointer hoverScale">
+            CREATE LOBBY
+        </div>
         <div class="lobbyContainer">
-           <div class="lobbyItem centerAll pointer">
+
+            <div class="lobbyItem centerAll pointer">
                 <div>
-                <p>
-                    <span>1/2</span> PLAYERS
-                </p>
-                <p class="joinLobby">
-                    JOIN LOBBY
-                </p>
+                    <p>
+                        <span>1/2</span> PLAYERS
+                    </p>
+                    <p class="joinLobby">
+                        JOIN LOBBY
+                    </p>
+                </div>
             </div>
-           </div> 
         </div>
         <!-- <button id='startGame' onclick="startGame()">START GAME</button> -->
     </section>
     <section id="pickPlayer" class="inner marginAuto">
         <ul>
             <li value="0" class="pointer playerSelect centerAll playerOne">
-                <img src="./sprites/charPick.png"/>
+                <img src="./sprites/charPick.png" />
             </li>
             <li value="1" class="pointer playerSelect centerAll playerTwo">
-                <img src="./sprites/charPick.png"/>
+                <img src="./sprites/charPick.png" />
             </li>
             <li value="2" class="pointer playerSelect centerAll playerThree">
-                <img src="./sprites/charPick.png"/>
+                <img src="./sprites/charPick.png" />
             </li>
             <li value="3" class="pointer playerSelect centerAll playerFour">
-                <img src="./sprites/charPick.png"/>
+                <img src="./sprites/charPick.png" />
             </li>
         </ul>
         <button id='createPlayer' class="marginAuto" onclick="createPlayer()">LOCK PICK</button>
@@ -64,8 +70,9 @@
             <div class="hpBar"></div>
         </div>
     </section>
-    
+
     <div id="rendererDiv"></div>
     <script src="initGame.js" type="module"></script>
 </body>
+
 </html>
