@@ -40,11 +40,15 @@ function createRoom(roomName){
         name: roomName
     })
 }
-createRoom("roomOne")
+const roomName=Math.floor(Math.random()*1000000000)
+createRoom(roomName)
 socket.on("roomCreated",(room)=>{
     console.log(room)
+    createLobbyItems(room)
 })
 
+
+// update lobby in dom
 let lobbySelect=document.getElementsByClassName("lobbyItem");
 if(lobbySelect){
     lobbySelect=Array.from(lobbySelect);
@@ -56,10 +60,32 @@ lobbySelect.forEach((element, index)=>{
     })
 })
 
+// create loby items dynamicly
+function createLobbyItems(rooms){
+    const lobbyContainer=document.getElementsByClassName("lobbyContainer")[0];
+    for(let room in rooms){
+        const lobbyItem=document.createElement("div");
+        lobbyItem.className="lobbyItem centerAll pointer";
+        const innerDiv=document.createElement("div")
+        const playerP=document.createElement("p");
+        playerP.innerHTML=`<span>${"1/2"}</span> PLAYERS`;
+        const joinLobbyP=document.createElement("p");
+        joinLobbyP.className="joinLobby";
+        joinLobbyP.innerHTML="JOIN LOBBY";
+        innerDiv.appendChild(playerP);
+        innerDiv.appendChild(joinLobbyP);
+        lobbyItem.appendChild(innerDiv)
+        console.log(lobbyItem)
+        lobbyContainer.appendChild(lobbyItem)
+
+    }
+}
+
+
 //update lobbystate
 if(socket){
     socket.on('lobbyUpdate',(count)=>{
-        lobbySelect[0].getElementsByTagName("span")[0].innerHTML=`${count}/2`
+        /* lobbySelect[0].getElementsByTagName("span")[0].innerHTML=`${count}/2`
         if(count===lobbySize){
             lobbySelect[0].getElementsByClassName("joinLobby")[0].innerHTML=`JOINED`
             lobbySelect[0].classList.add("lobbyFull")
@@ -67,7 +93,7 @@ if(socket){
             return 
         }
         lobbySelect[0].classList.remove("lobbyFull")
-
+ */
     })
 }
 

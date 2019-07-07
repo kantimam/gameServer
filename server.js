@@ -55,13 +55,18 @@ io.on('connection', (socket) => {
     
     socket.on('createRoom',(room)=>{
         if(room && room.name){
+            if(hasRoom){
+                socket.emit("roomCreated",rooms)
+
+            }
             socket.join(room.name)
             if(rooms[room.name]){
                 rooms[room.name].push(socket.id)
             }else{
                 rooms[room.name]=[socket.id];
             }
-            io.to(room.name).emit("roomCreated",rooms)
+            /* io.to(room.name).emit("roomCreated",rooms) */
+            io.sockets.emit("roomCreated",rooms)
             console.log(socket.in(room.name).id)
         }
     })
@@ -135,6 +140,19 @@ io.on('connection', (socket) => {
 
 function startGameLoop() {
     return setInterval(() => updateGameState(), 1000 / 60 /* 1000/5 */ );
+}
+
+
+//check if id already has a room
+function hasRoom(id, roomObject){
+    let check=false;
+    for(room in roomObject){
+        if(roomObject[room][id]){
+            check=true
+            break;
+        }
+    }
+    return check
 }
 
 
