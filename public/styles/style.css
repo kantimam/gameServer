@@ -144,13 +144,45 @@ main h3, main h4 {
 }
 
 #gamePrepare {
-  background-color: blue;
+  /* background-color: blue; */
+}
+
+#gamePrepare .lobbyContainer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  height: 10rem;
+  width: 100%;
+}
+
+#gamePrepare .lobbyContainer .lobbyItem {
+  height: 100%;
+  min-width: 18rem;
+  border-radius: 1rem;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: 2px solid grey;
+}
+
+#gamePrepare .lobbyContainer .lobbyItem p {
+  text-align: center;
+  font-size: 1.8rem;
+  margin: 0.6rem 0;
+}
+
+#gamePrepare .lobbyContainer .lobbyItem .joinLobby {
+  font-weight: bold;
+  font-size: 2.2rem;
+}
+
+#gamePrepare .lobbyContainer .lobbyItem:hover {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
 }
 
 button {

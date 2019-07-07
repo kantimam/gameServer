@@ -19,13 +19,24 @@ playerSelect.forEach((element)=>{
     })
 })
 
+// connect to socket
+let socket;
 
+let lobbySelect=document.getElementsByClassName("lobbyItem");
+if(lobbySelect){
+    lobbySelect=Array.from(lobbySelect);
+}
+lobbySelect.forEach((element, index)=>{
+    element.addEventListener("click",(event)=>{
+
+    })
+})
 /* function selectedPlayer(i){
 
 } */
 
 // connection logic
-const socket = io();
+/* const socket = io(); */
 
 let gameState='waiting';
 function createPlayer(){

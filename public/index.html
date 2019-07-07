@@ -25,9 +25,19 @@
         <h3>you need at least 2 players to play.</h3>
     </main>
     <section id="gamePrepare" class="inner marginAuto">
-        <button id='createPlayer' onclick="joinLobby()">JOIN LOBBY</button>
-        <button id='createPlayer' onclick="createPlayer()">CREATE PLAYER</button>
-        <button id='startGame' onclick="startGame()">START GAME</button>
+        <div class="lobbyContainer">
+           <div onclick="joinLobby()" class="lobbyItem centerAll pointer">
+                <div>
+                <p>
+                    1/2 PLAYERS
+                </p>
+                <p class="joinLobby">
+                    JOIN LOBBY
+                </p>
+            </div>
+           </div> 
+        </div>
+        <!-- <button id='startGame' onclick="startGame()">START GAME</button> -->
     </section>
     <section id="pickPlayer" class="inner marginAuto">
         <ul>
@@ -44,7 +54,7 @@
                 <img src="./sprites/charPick.png"/>
             </li>
         </ul>
-        <button id='createPlayer' class="marginAuto" onclick="createPlayer()">CREATE PLAYER</button>
+        <button id='createPlayer' class="marginAuto" onclick="createPlayer()">LOCK PICK</button>
     </section>
     <section id="gameUi" class="inner marginAuto">
         <div class="playerIcon">
