@@ -143,6 +143,11 @@ main{
                 transform: scale(1.1)
             }
         }
+        .lobbyFull{
+            background-color: lightgreen;
+            transition: 0.1s;
+            transform: scale(1.1)
+        }
     }
     
 }

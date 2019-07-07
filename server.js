@@ -41,10 +41,12 @@ io.on('connection', (socket) => {
     connectionsCount++;
     console.log(`user connected with the id: ${socket.id}`)
     socketId = socket.id;
+    io.sockets.emit('lobbyUpdate', connectionsCount)
     socket.on('disconnect', () => {
         connectionsCount--;
         console.log(`disconnected userId: ${socket.id}`)
         delete gameState.players[socket.id]
+        io.sockets.emit('lobbyUpdate', connectionsCount)
     })
     socket.on('newPlayer', (selectedPlayer) => {
         // check what sprite the other player has and pick another one

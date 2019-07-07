@@ -185,6 +185,14 @@ main h3, main h4 {
           transform: scale(1.1);
 }
 
+#gamePrepare .lobbyContainer .lobbyFull {
+  background-color: lightgreen;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+
 button {
   height: 2rem;
   padding: 0.5rem;
