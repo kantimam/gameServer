@@ -50,24 +50,33 @@ io.on('connection', (socket) => {
         connectionsCount--;
         console.log(`disconnected userId: ${socket.id}`)
         delete gameState.players[socket.id]
+        closeRooms(rooms,socket);
+
         io.sockets.emit('lobbyUpdate', connectionsCount)
     })
     
     socket.on('createRoom',(room)=>{
         if(room && room.name){
-            if(hasRoom){
+            if(hasRoom(socket.id, rooms)){
                 socket.emit("roomCreated",rooms)
 
-            }
-            socket.join(room.name)
-            if(rooms[room.name]){
-                rooms[room.name].push(socket.id)
             }else{
-                rooms[room.name]=[socket.id];
+                socket.join(room.name)
+                if(rooms[room.name]){
+                    rooms[room.name].players.push(socket.id)
+                }else{
+                    const newRoom={
+                        creator: socket.id,
+                        name: room.displayName,
+                        players:[socket.id]
+                    }
+                    rooms[room.name]=newRoom;
+                }
+                /* io.to(room.name).emit("roomCreated",rooms) */
+                io.sockets.emit("roomCreated",rooms)
+                console.log(socket.in(room.name).id)
             }
-            /* io.to(room.name).emit("roomCreated",rooms) */
-            io.sockets.emit("roomCreated",rooms)
-            console.log(socket.in(room.name).id)
+            
         }
     })
 
@@ -146,13 +155,23 @@ function startGameLoop() {
 //check if id already has a room
 function hasRoom(id, roomObject){
     let check=false;
-    for(room in roomObject){
-        if(roomObject[room][id]){
+    for(let room in roomObject){
+        if(roomObject[room].players.includes(id)){
             check=true
             break;
         }
     }
     return check
+}
+
+function closeRooms(roomObject, socket){
+    for(let room in roomObject){
+        if(roomObject[room].creator===socket.id){
+            check=true
+            delete roomObject[room]
+            //socket.leave(room)
+        }
+    }
 }
 
 

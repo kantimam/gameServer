@@ -35,13 +35,15 @@ function initSocket(){
     listenToPlayerCreated();
     listenToGameStarted();
 }
-function createRoom(roomName){
+function createRoom(roomName, displayName){
     socket.emit("createRoom",{
-        name: roomName
+        name: roomName,
+        displayName: displayName
     })
 }
 const roomName=Math.floor(Math.random()*1000000000)
-createRoom(roomName)
+const displayName=Math.floor(Math.random()*1000000000)
+createRoom(roomName, displayName)
 socket.on("roomCreated",(room)=>{
     console.log(room)
     createLobbyItems(room)
@@ -63,6 +65,12 @@ lobbySelect.forEach((element, index)=>{
 // create loby items dynamicly
 function createLobbyItems(rooms){
     const lobbyContainer=document.getElementsByClassName("lobbyContainer")[0];
+    //remove all old children
+    while(lobbyContainer.firstChild){
+        lobbyContainer.removeChild(lobbyContainer.firstChild)
+    }
+
+    //add new children
     for(let room in rooms){
         const lobbyItem=document.createElement("div");
         lobbyItem.className="lobbyItem centerAll pointer";
