@@ -44,7 +44,6 @@ io.on('connection', (socket) => {
     connectionsCount++;
     console.log(`user connected with the id: ${socket.id}`)
     socketId = socket.id;
-    io.sockets.emit('lobbyUpdate', connectionsCount)
     
     socket.on('disconnect', () => {
         connectionsCount--;
@@ -52,7 +51,6 @@ io.on('connection', (socket) => {
         delete gameState.players[socket.id]
         closeRooms(rooms,socket);
 
-        io.sockets.emit('lobbyUpdate', connectionsCount)
     })
     
     socket.on('createRoom',(room)=>{
@@ -63,7 +61,8 @@ io.on('connection', (socket) => {
             }else{
                 socket.join(room.name)
                 if(rooms[room.name]){
-                    rooms[room.name].players.push(socket.id)
+                    return
+                    /* rooms[room.name].players.push(socket.id) */
                 }else{
                     const newRoom={
                         creator: socket.id,
@@ -78,6 +77,16 @@ io.on('connection', (socket) => {
             }
             
         }
+    })
+
+    socket.on('joinRoom',(name)=>{
+        if(rooms[name]){
+            rooms[name].players.push(socket.id)
+            socket.join(name);
+            socket.emit("roomJoined",{message: `succesfully joined ${name}`})
+            io.sockets.emit("roomCreated",rooms)
+        }
+        
     })
 
     socket.on('newPlayer', (selectedPlayer) => {
@@ -167,9 +176,8 @@ function hasRoom(id, roomObject){
 function closeRooms(roomObject, socket){
     for(let room in roomObject){
         if(roomObject[room].creator===socket.id){
-            check=true
             delete roomObject[room]
-            //socket.leave(room)
+            io.sockets.emit("roomCreated",rooms)
         }
     }
 }

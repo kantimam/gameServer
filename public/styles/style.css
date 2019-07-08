@@ -172,7 +172,7 @@ main h3, main h4 {
 }
 
 #gamePrepare .lobbyContainer .lobbyItem {
-  margin: 0 0.5rem;
+  margin: 0 1rem;
   height: 100%;
   min-width: 18rem;
   border-radius: 1rem;
@@ -199,8 +199,16 @@ main h3, main h4 {
           transform: scale(1.1);
 }
 
-#gamePrepare .lobbyContainer .lobbyFull {
+#gamePrepare .lobbyContainer .lobbyJoined {
   background-color: lightgreen;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+
+#gamePrepare .lobbyContainer .myLobby {
+  background-color: lightpink;
   -webkit-transition: 0.1s;
   transition: 0.1s;
   -webkit-transform: scale(1.1);

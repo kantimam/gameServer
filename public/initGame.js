@@ -23,17 +23,24 @@ playerSelect.forEach((element)=>{
 })
 
 // connect to socket
-let socket;
-socket=io();
-function initSocket(){
-    if(socket && socket.id){
-        /* console.log(`you are already connected with the id: ${socket.id}`) */
+//let socket;
+const socket=io();
+function initSocket(roomKey, roomVal){
+    console.log(roomVal)
+    console.log(socket.id)
+    // handle player already in room
+    if(socket && socket.id && roomVal.players.includes(socket.id)){
+        console.log(roomVal, socket.id)
         alert(`you are already connected with the id: ${socket.id}`)
         return 
     }
     /* socket=io(); */
-    listenToPlayerCreated();
-    listenToGameStarted();
+    /* listenToPlayerCreated();
+    listenToGameStarted(); */
+    socket.emit("joinRoom",roomKey);
+    socket.on("roomJoined",(response)=>{
+        console.log(response.message)
+    })
 }
 function createRoom(roomName, displayName){
     socket.emit("createRoom",{
@@ -51,16 +58,8 @@ socket.on("roomCreated",(room)=>{
 
 
 // update lobby in dom
-let lobbySelect=document.getElementsByClassName("lobbyItem");
-if(lobbySelect){
-    lobbySelect=Array.from(lobbySelect);
-}
-lobbySelect.forEach((element, index)=>{
-    element.addEventListener("click",(event)=>{
-        /* element.getElementsByTagName("span")[0].innerHTML="asd" */
-        initSocket();
-    })
-})
+let lobbySelect
+
 
 // create loby items dynamicly
 function createLobbyItems(rooms){
@@ -69,39 +68,56 @@ function createLobbyItems(rooms){
     while(lobbyContainer.firstChild){
         lobbyContainer.removeChild(lobbyContainer.firstChild)
     }
-
+    console.log(socket.id)
     //add new children
     for(let room in rooms){
         const lobbyItem=document.createElement("div");
         lobbyItem.className="lobbyItem centerAll pointer";
         const innerDiv=document.createElement("div")
+        const nameP=document.createElement("p");
+        nameP.innerHTML=rooms[room].name
         const playerP=document.createElement("p");
-        playerP.innerHTML=`<span>${"1/2"}</span> PLAYERS`;
+        playerP.innerHTML=`<span>${rooms[room].players.length}/2</span> PLAYERS`;
         const joinLobbyP=document.createElement("p");
         joinLobbyP.className="joinLobby";
-        joinLobbyP.innerHTML="JOIN LOBBY";
+        joinLobbyP.innerHTML=rooms[room].creator===socket.id?"WAITING...":"JOIN LOBBY";
+        innerDiv.appendChild(nameP);
         innerDiv.appendChild(playerP);
         innerDiv.appendChild(joinLobbyP);
         lobbyItem.appendChild(innerDiv)
-        console.log(lobbyItem)
+        lobbyItem.classList.add(rooms[room].players.includes(socket.id)?rooms[room].creator===socket.id? "myLobby": "lobbyJoined": null);
         lobbyContainer.appendChild(lobbyItem)
-
+        
+        lobbyItem.addEventListener("click",()=>{
+            initSocket(room, rooms[room]);
+        })
     }
+    lobbySelect=document.getElementsByClassName("lobbyItem");
+    if(lobbySelect){
+        lobbySelect=Array.from(lobbySelect);
+    }
+    
 }
 
 
 //update lobbystate
 if(socket){
     socket.on('lobbyUpdate',(count)=>{
-        /* lobbySelect[0].getElementsByTagName("span")[0].innerHTML=`${count}/2`
-        if(count===lobbySize){
-            lobbySelect[0].getElementsByClassName("joinLobby")[0].innerHTML=`JOINED`
-            lobbySelect[0].classList.add("lobbyFull")
-            console.log("game is ready")
-            return 
-        }
-        lobbySelect[0].classList.remove("lobbyFull")
- */
+        /* if(lobbySelect && lobbySelect.length){
+            lobbySelect.forEach(element=>{
+                element.getElementsByTagName("span")[0].innerHTML=`${count}/2`
+                if(count===lobbySize){
+                    lobbySelect[0].getElementsByClassName("joinLobby")[0].innerHTML=`JOINED`
+                    lobbySelect[0].classList.add("lobbyFull")
+                    console.log("game is ready")
+                    return 
+                }
+                lobbySelect[0].classList.remove("lobbyFull")
+        
+            })
+        } */
+        
+        
     })
 }
 
@@ -129,7 +145,8 @@ function listenToPlayerCreated(){
         }
     })
 }
-
+listenToPlayerCreated();
+listenToGameStarted();
 
 function startGame(){
     if(currentPlayerCount===2 && socket){
