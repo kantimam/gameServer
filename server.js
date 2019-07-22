@@ -90,6 +90,9 @@ io.on('connection', (socket) => {
     })
 
     socket.on('newPlayer', (selectedPlayer) => {
+        // get the room of the socket without its own default room
+        const socketRoom=Object.keys(socket.rooms).filter(item=> item!=socket.id)[0];
+        console.dir(socketRoom)
         // check what sprite the other player has and pick another one
         let objectPlayerCount = Object.values(gameState.players).length;
         //if playercount is not 0 give them another sprite from the array.... also handle bad values
@@ -182,6 +185,74 @@ function closeRooms(roomObject, socket){
     }
 }
 
+
+function updateGameStateOld() {
+    for (let i = gameState.projectiles.length - 1; i >= 0; i--) {
+        if (gameState.projectiles[i].aliveFor < 0) {
+            gameState.projectiles.splice(i, 1);
+        } else {
+            gameState.projectiles[i].x += gameState.projectiles[i].moveX;
+            gameState.projectiles[i].y += gameState.projectiles[i].moveY;
+            //check for collision with map
+            const collisions = collisionWorld(gameState.projectiles[i].x, gameState.projectiles[i].y, gameResolution.x, gameResolution.y);
+
+
+            /* TODO maybe split projectiles into 2 arrays to decrease checks */
+
+            // check collision with players
+            let wasDeleted=false;
+            for (player in gameState.players) {
+                gameState.players[player]
+                if (collisionActorSimple(gameState.players[player], gameState.projectiles[i]) &&
+                    gameState.players[player].team != gameState.projectiles[i].team) {
+                    // remove the projectile and jump to next iteration
+                    gameState.projectiles.splice(i, 1);
+                    gameState.players[player].health -=20;
+                    wasDeleted=true;
+                    console.log(gameState.players[player])
+                }
+                // no need to check collision with the other player if projectile doesnt excist anymore
+                if(wasDeleted) break;
+            }
+            if(wasDeleted) continue;
+
+
+            if (collisions.top) {
+                gameState.projectiles[i].y = 0;
+                gameState.projectiles[i].moveY *= -1;
+                gameState.projectiles[i].scale += 0.2;
+                gameState.projectiles[i].height *= gameState.projectiles[i].scale;
+                gameState.projectiles[i].width *= gameState.projectiles[i].scale;
+
+            }
+            if (collisions.right) {
+                gameState.projectiles[i].x = gameResolution.x;
+                gameState.projectiles[i].moveX *= -1;
+                gameState.projectiles[i].scale += 0.2;
+                gameState.projectiles[i].height *= gameState.projectiles[i].scale;
+                gameState.projectiles[i].width *= gameState.projectiles[i].scale;
+            }
+            if (collisions.bottom) {
+                gameState.projectiles[i].y = gameResolution.y;
+                gameState.projectiles[i].moveY *= -1;
+                gameState.projectiles[i].scale += 0.2;
+                gameState.projectiles[i].height *= gameState.projectiles[i].scale;
+                gameState.projectiles[i].width *= gameState.projectiles[i].scale;
+            }
+            if (collisions.left) {
+                gameState.projectiles[i].x = 0;
+                gameState.projectiles[i].moveX *= -1;
+                gameState.projectiles[i].scale += 0.2;
+                gameState.projectiles[i].height *= gameState.projectiles[i].scale;
+                gameState.projectiles[i].width *= gameState.projectiles[i].scale;
+            }
+
+            gameState.projectiles[i].aliveFor--;
+        }
+    }
+
+    io.sockets.emit('state', gameState);
+}
 
 function updateGameState() {
     for (let i = gameState.projectiles.length - 1; i >= 0; i--) {
