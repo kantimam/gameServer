@@ -155,6 +155,13 @@ function startGame(){
 }
 window.startGame=startGame;
 
+function startTest(){
+    if(socket){
+        socket.emit('startTest')
+    }
+}
+window.startTest=startTest;
+
 function listenToGameStarted(){
     socket.on('gamestarted',(initialGameState)=>{
         if(socket && gameState!=='started'){

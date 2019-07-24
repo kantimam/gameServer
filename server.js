@@ -127,7 +127,18 @@ io.on('connection', (socket) => {
 
     })
 
+    // single player for testing
+    socket.on('startTest', () => {
+        if (connectionsCount === 2 || true) {
+            console.log(Object.entries(gameState.players))
+            socket.emit('gamestarted', gameState)
+            gameLoop = startGameLoop();
+        }
+
+    })
+
     socket.on('playerMovement', (playerMovement) => {
+        // get player from its room now
         const currentPlayer = gameState.players[socket.id];
         if (currentPlayer) {
             currentPlayer.x += playerMovement.x;
@@ -136,6 +147,7 @@ io.on('connection', (socket) => {
         }
     })
     socket.on('shoot', (projectile) => {
+        // get player from its room now
         const currentPlayer = gameState.players[socket.id]
         if (currentPlayer) {
             const angle = Math.atan2(projectile.x - currentPlayer.x, projectile.y - currentPlayer.y);
@@ -255,6 +267,7 @@ function updateGameStateOld() {
 }
 
 function updateGameState() {
+    // map over rooms
     for (let i = gameState.projectiles.length - 1; i >= 0; i--) {
         if (gameState.projectiles[i].aliveFor < 0) {
             gameState.projectiles.splice(i, 1);
